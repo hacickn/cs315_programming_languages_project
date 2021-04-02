@@ -1,5 +1,5 @@
 # cs315_programming_languages_project
- It consists of the project 1 and 2 which was given in the cs315 course. Project 2 is continuity of the project 1.
+* It consists of the project 1 and 2 which was given in the cs315 course. Project 2 is continuity of the project 1.
 
 ## Project 1
 Designing a language to create an adventure game.
