@@ -3,7 +3,7 @@
 
 ## Project 1
 Designing a language to create an adventure game.
-### Language Design
+### Language Design
 - variable identifiers
 - assignment operator
 - expressions (arithmetic, relational, boolean, their combination)
@@ -13,10 +13,10 @@ Designing a language to create an adventure game.
 - statements for input / output (to ask questions and read answers)
 - function definitions and function calls.
 - comments
-### Lexical Analysis
+### Lexical Analysis
 It is a lexical Analysis implementation for to preparing code to parser.
 
-### Example Programs
+#### Example Programs
 - An adventure game where the goal is to escape from the monsters and find the treasures in a castle.
 - A map of a castle with 5 rooms, and specify the transitions between rooms.
 - The treasures and monsters into the rooms.
@@ -29,11 +29,11 @@ It is a lexical Analysis implementation for to preparing code to parser.
 + eat food to have strength
 + use tools
 + buy food or tools
--Inform the user about the final score: 2.wealth + 3.strength
+- Inform the user about the final score: 2.wealth + 3.strength
 
 ## Project 2
 
-### Revised and Augmented Language Design
+#### Revised and Augmented Language Design
 - variable identifiers
 - assignment operator
 - expressions (arithmetic, relational, boolean, their combination)
@@ -43,15 +43,15 @@ It is a lexical Analysis implementation for to preparing code to parser.
 - statements for input / output (to ask questions and read answers)
 - function definitions and function calls.
 - comments
-### Implementing the Parser
+#### Implementing the Parser
 It is a parser implementation which is continuity of the lexical analysis.
 
-### Example Program
+#### Example Program
 Same with the project 1
 
 
 
-*NOTE*
+#### NOTE
 -Details can be found in the reports of the project1 and project 2.
 
 -My teammate was [Muhammed Musab Oksas](https://github.com/mmoksas68) 
