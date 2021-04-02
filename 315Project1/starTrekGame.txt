@@ -1,0 +1,108 @@
+main{
+  var_object user={
+    var_number $userAge = 15
+  };
+
+  var_number $gameFollow = 1;
+  var_number $userInput = 0;
+  var_number $points = 10;
+
+  var_list planets = [
+      "Vulcan",
+      "Andoria",
+      "Niburu",
+      "Remus"
+  ];
+
+  var_list crew = [
+      "CAPTAIN KIRK",
+      "SPOCK",
+      "UHURA"
+  ];
+
+  var_list evils =[
+      "KHAN",
+      "GENERAL CHANG",
+      "DR, SORAN"
+  ];
+
+  function fight($gameStep,$firstPower,$secondPower, isScottyCalled) =>{
+     if($gameStep == 1){
+        return $firstPower > $secondPower || isScottyCalled;
+     };
+     if($gameStep == 2){
+        return $firstPower > $secondPower && isScottyCalled;
+     };
+     if($gameStep == 3){
+        return $firstPower > $secondPower ~| isScottyCalled;
+     };
+     if($gameStep == 4){
+        return $firstPower > $secondPower ~& isScottyCalled;
+     };
+     if($gameStep == 5){
+        return $firstPower > $secondPower <===> isScottyCalled;
+     };
+     if($gameStep == 6){
+        return $firstPower > $secondPower ==> isScottyCalled;
+     };
+     if($gameStep == 7){
+        return $firstPower > $secondPower && (isScottyCalled || true);
+     };
+     if($gameStep == 8){
+        return $firstPower > $secondPower && (isScottyCalled || true);
+     };
+     if($gameStep == 9){
+        return $firstPower > $secondPower && (isScottyCalled || true);
+     };
+  };
+  printLine("Welcome to Fedarels space, you should enter a value each step to");
+  printLine("win, but you have to be carefull while you are choosing because choosing");
+  printLine("bigger value is not a good choice always.")
+
+  while($gameFollow < 10){
+    var_bool beamMeUpScotty = true;
+    input($userInput);
+    if($gameFollow == 1 || $gameFollow == 5 || $gameFollow == 8 || beamMeUpScotty){
+      var_bool currentResult = fight($gameFollow, $gameFollow + $userInput - (4 + 2 / 2),$gameFollow / ( 1 / ($userInput + 2 / 2) ),beamMeUpScotty );
+    }else{
+      var_bool currentResult = fight($gameFollow,$gameFollow / ( 1 / ($userInput + 2 / 2) ), $gameFollow + $userInput - (4 + 2 / 2),beamMeUpScotty );
+    };
+
+    if(currentResult){
+      $points = $points * $points;
+      if($gameFollow == 1 || $gameFollow == 4 || $gameFollow == 7){
+        printLine("Fight winner is " , crew[0]);
+      };
+      if($gameFollow == 2 || $gameFollow == 5 || $gameFollow == 8){
+        printLine("Fight winner is " , crew[1]);
+
+      };
+      if($gameFollow == 3 || $gameFollow == 6 || $gameFollow == 9){
+        printLine("Fight winner is " , crew[2]);
+      };
+    }else{
+      if($points > 10){
+        $points = $points / 10;
+      }else{
+        $points = $points / 2;
+      };
+
+      if($gameFollow == 1 || $gameFollow == 4 || $gameFollow == 7){
+        printLine("Fight winner is " , evils[0]);
+      };
+      if($gameFollow == 2 || $gameFollow == 5 || $gameFollow == 8){
+        printLine("Fight winner is " , evils[1]);
+      };
+      if($gameFollow == 3 || $gameFollow == 6 || $gameFollow == 9){
+        printLine("Fight winner is " , evils[2]);
+      };
+    };
+
+    beamMeUpScotty = ~beamMeUpScotty;
+    $gameFollow++;
+  };
+
+  printLine("CAPTAIN KIRK: BEAM ME UP ", user->userName);
+  printLine("Score " , $points);
+  printLine("Game is finished ");
+}

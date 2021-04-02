@@ -1,0 +1,552 @@
+start
+
+/* This is the first game */
+
+/* Decleration of showing user status information function */
+function showUserInformation() => {
+  printLine("Your stealth is ", user->strength);
+  printLine("Your attack is ", user->attack);
+  printLine("Your wealth is ", user->wealth);
+  printLine("Your have ", user->foodListSize , " foods" );
+  forEach(item in user->foodList){
+    printLine("Item " , item->nameOfFood , " strength Increment " , item->strengthIncrement);
+  };
+  printLine("Your have ", user->toolList , " tools" );
+  forEach(item in user->toolList){
+    printLine("Tool " , item->nameOfTool , " strengthIncrement " , item->strengthIncrement);
+  };
+}
+
+
+/*Decleration of showing market place information function */
+function showMarketPlaceInformation()=>{
+  var_number $tempUserChoice = 0;
+  var_number $listingOne = 1;
+  printLine("There are " , marketPlace->numberOfFood, " food market");
+  forEach(item in marketPlace->foods){
+    printLine($listingOne ,"Name of food: " , item->nameOfFood, " strength increment ", item->strengthIncrement , " price " , item->price);
+    $listingOne++;
+  };
+
+  printLine("There are " , marketPlace->numberOfTool, " tool market");
+  forEach(item in marketPlace->tools){
+    printLine("Name of tool: " , item->nameOfTool, " strength increment ", item->attackIncrement , " price " , item->price);
+    $listingOne++;
+  };
+  printLine($listingOne, " to go back");
+
+  printLine("What you want to buy, enter its list number");
+  while($tempUserChoice != 7){
+    input($tempUserChoice);
+    var_number $price = $foodList->price;
+    var_number $strengthIncrement = $foodList->strengthIncrement;
+    var_number $attackIncrement = $foodList->attackIncrement;
+    if($user->wealth >= $price ){
+      if($tempUserChoice <= 3 && $tempUserChoice > 0){
+          user->strength = $user->strength + $strengthIncrement;
+      };
+      if($tempUserChoice <= 6 && $tempUserChoice > 3){
+          user->attack = $user->attack + $attackIncrement;
+      };
+      if($tempUserChoice < 1 || $tempUserChoice > 7){
+          printLine("Please enter valid value");
+      };
+    }else{
+      printLine("You do not have enough money to buy this");
+    };
+  };
+}
+
+/*Decleration of performing fight function */
+function battleWithMonster($roomName, $monsterStrength, $monsterAttack) => {
+  while($user->strength > 0 && $monsterStrength > 0){
+    $monsterStrength = $monsterStrength - $user->attack;
+    if($monsterStrength > 0){
+      user->strength = $user->strength - $monsterAttack;
+    };
+  };
+
+  if($user->strength > 0){
+    if($roomName == 1){
+      castle->room1->monster->strength = -1;
+      user->wealth = castle->room1->treasure;
+      castle->room1->treasure = 0;
+    };
+    if($roomName == 2){
+      castle->room2->monster->strength = -1;
+      user->wealth = castle->room2->treasure;
+      castle->room2->treasure = 0;
+    };
+    if($roomName == 3){
+      castle->room3->monster->strength = -1;
+      user->wealth = castle->room3->treasure;
+      castle->room3->treasure = 0;
+    };
+    if($roomName == 4){
+      castle->room4->monster->strength = -1;
+      user->wealth = castle->room4->treasure;
+      castle->room4->treasure = 0;
+    };
+    if($roomName == 5){
+      castle->room5->monster->strength = -1;
+      user->wealth = castle->room5->treasure;
+      castle->room5->treasure = 0;
+    };
+    return true;
+  }else{
+    return false;
+  };
+}
+
+main => {
+    /*Decleration of main variables that can help us to trace */
+    var_number $currentRoom = 1;
+    var_number $userChoice = 1;
+
+    /*Decleration of user object */
+    var_object user = {
+      var_number $strength = 100,
+      var_number $wealth = 0,
+      var_number $attack = 25,
+      var_number $foodListSize = 0,
+      var_list foodList,
+      var_number $toolListSize = 0,
+      var_list toolList,
+      var_bool isAlive = true
+    };
+
+    /*Decleration of market object */
+    var_object marketPlace = {
+       var_number $numberOfFood = 3,
+       var_list foods =[
+          {
+            var_string nameOfFood = "Apple",
+            var_number $price = 20,
+            var_number $strengthIncrement = 20
+          },
+          {
+            var_string nameOfFood = "Turkish Delight",
+            var_number $price = 2000,
+            var_number $strengthIncrement = 2000
+          },
+          {
+            var_string nameOfFood = "Etliekmek",
+            var_number $price = 50,
+            var_number $strengthIncrement = 100
+          }
+       ],
+       var_number $numberOfTool = 3,
+       var_list tools =[
+          {
+             var_string nameOfTool = "Sword",
+             var_number $price = 20,
+             var_number $attackIncrement = 20
+          },
+          {
+             var_string nameOfTool = "Bilkent",
+             var_number $price = 20000,
+             var_number $attackIncrement = 20000
+          },
+          {
+             var_string nameOfTool = "Gun",
+             var_number $price = 50,
+             var_number $attackIncrement = 100
+          }
+        ]
+    };
+
+    /*Decleration of castle object */
+    var_object castle = {
+        var_object room1 = {
+          var_object monster = {
+            var_number $strength = 50,
+            var_number $attack = 10
+          },
+          var_number $treasure = 100,
+          var_number $numberOfDoor = 1,
+          var_list roomsIndexForTransition = ["room2"]
+        },
+        var_object room2 = {
+          var_object monster = {
+            var_number $strength = 50,
+            var_number $attack = 10
+          },
+          var_number $treasure = 700,
+          var_number $numberOfDoor = 4,
+          var_list roomsIndexForTransition = ["room1","room3","room4","room5"]
+        },
+        var_object room3 = {
+          var_object monster = {
+            var_number $strength = 100,
+            var_number $attack = 10
+          },
+          var_number $treasure = 700,
+          var_number $numberOfDoor = 1,
+          var_list roomsIndexForTransition = ["room2"]
+        },
+        var_object room4 = {
+          var_object monster = {
+            var_number $strength = 100,
+            var_number $attack = 20
+          },
+          var_number $treasure = 700,
+          var_number $numberOfDoor = 1,
+          var_list roomsIndexForTransition = ["room2"]
+        },
+        var_object room5 = {
+          var_object monster = {
+            var_number $strength = 20000,
+            var_number $attack = 25
+          },
+          var_number $treasure = 60000000,
+          var_number $numberOfDoor = 1,
+          var_list roomsIndexForTransition = ["room2"]
+        }
+    };
+
+    /*loop for the game*/
+    while(user->isAlive && ($castle->room5->monster->strength > 0) ){
+        printLine("                Map Of Castle                    ");
+        printLine("                -------------                    ");
+        printLine("                |   room1   |                    ");
+        printLine("                -----   -----                    ");
+        printLine("    room3     <->   room2    <->     room4       ");
+        printLine("                -----   -----                    ");
+        printLine("                |   room5   |                    ");
+        printLine("                -------------                    ");
+
+        printLine("You are currently in room", $currentRoomIndex);
+
+        if($currentRoom == 1){
+          if($castle->room1->monster->strength > 0){
+              printLine("You are at the beginning of the game.");
+              printLine("For character info press 1 \nFor attack press 2");
+              input($userChoice);
+              if($userChoice == 1){
+                 showUserInformation();
+              };
+              if($userChoice == 2){
+                 user->isAlive = battleWithMonster(1, castle->room1->monster->strength, castle->room1->monster->attack);
+              };
+              if($userChoice < 0 || $userChoice > 6){
+                 printLine("Enter valid value");
+              };
+          }else{
+             printLine("You beat the monster in this room");
+             printLine("Choose What you want");
+             printLine("For character info press 1 \nFor marketPlace press 2\nFor pass room2 press 3");
+             input($userChoice);
+             if($userChoice == 1){
+                showUserInformation();
+             };
+             if($userChoice == 2){
+                showMarketPlaceInformation();
+             };
+             if($userChoice == 3){
+                $currentRoom = 2;
+             };
+             if($userChoice < 0 || $userChoice > 6){
+                printLine("Enter valid value");
+             };
+          };
+        }else_if($currentRoom == 2){
+          if($castle->room2->monster->strength > 0){
+            printLine("You do not fight with this monster.");
+            printLine("For character info press 1 \nFor marketPlace press 2\nFor attack press 3\nFor go back to room1 press 4");
+            input($userChoice);
+            if($userChoice == 1){
+              showUserInformation();
+            };
+            if($userChoice == 2){
+              showMarketPlaceInformation();
+            };
+            if($userChoice == 3){
+              user->isAlive = battleWithMonster(2, castle->room2->monster->strength, castle->room2->monster->attack);
+            };
+            if($userChoice == 4){
+              $currentRoom = 1;
+            };
+            if($userChoice < 0 || $userChoice > 6){
+               printLine("Enter valid value");
+            };
+          }else{
+            printLine("You beat the monster in this room");
+            printLine("Choose What you want");
+            printLine("For character info press 1 \nFor marketPlace press 2\nFor pass room3 press 3");
+            printLine("For pass room4 press 4\nFor pass room5 press 5\nFor go back to room1 press 6");
+            input($userChoice);
+            if($userChoice == 1){
+              showUserInformation();
+            };
+            if($userChoice == 2){
+              showMarketPlaceInformation();
+            };
+            if($userChoice == 3){
+              $currentRoom = 3;
+            };
+            if($userChoice == 4){
+              $currentRoom = 4;
+            };
+            if($userChoice == 5){
+              $currentRoom = 5;
+            };
+            if($userChoice == 6){
+              $currentRoom = 1;
+            };
+            if($userChoice < 0 || $userChoice > 6){
+               printLine("Enter valid value");
+            };
+          };
+        }else_if($currentRoom == 3){
+          if($castle->room3->monster->strength > 0){
+            printLine("You do not fight with this monster.");
+            printLine("For character info press 1 \nFor marketPlace press 2\nFor attack press 3\nFor go back to room2 press 4");
+            input($userChoice);
+            if($userChoice == 1){
+              showUserInformation();
+            };
+            if($userChoice == 2){
+              showMarketPlaceInformation();
+            };
+            if($userChoice == 3){
+              user->isAlive = battleWithMonster(3, castle->room2->monster->strength, castle->room2->monster->attack);
+            };
+            if($userChoice == 4){
+              $currentRoom = 2;
+            };
+            if($userChoice < 0 || $userChoice > 6){
+              printLine("Enter valid value");
+            };
+          }else{
+            printLine("You beat the monster in this room");
+            printLine("Choose What you want");
+            printLine("For character info press 1 \nFor marketPlace press 2\nFor pass room2 press 3");
+            input($userChoice);
+            if($userChoice == 1){
+              showUserInformation();
+            };
+            if($userChoice == 2){
+              showMarketPlaceInformation();
+            };
+            if($userChoice == 3){
+              $currentRoom = 2;
+            };
+            if($userChoice < 0 || $userChoice > 6){
+               printLine("Enter valid value");
+            };
+          };
+        }else_if($currentRoom == 4){
+          if($castle->room4->monster->strength > 0){
+            printLine("You do not fight with this monster.");
+            printLine("For character info press 1 \nFor marketPlace press 2\nFor attack press 3\nFor go back to room2 press 4");
+            input($userChoice);
+            if($userChoice == 1){
+              showUserInformation();
+            };
+            if($userChoice == 2){
+              showMarketPlaceInformation();
+            };
+            if($userChoice == 3){
+              user->isAlive = battleWithMonster(4, castle->room2->monster->strength, castle->room2->monster->attack);
+            };
+            if($userChoice == 4){
+              $currentRoom = 2;
+            };
+            if($userChoice < 0 || $userChoice > 6){
+              printLine("Enter valid value");
+            };
+
+          }else{
+            printLine("You beat the monster in this room");
+            printLine("Choose What you want");
+            printLine("For character info press 1 \nFor marketPlace press 2\nFor pass room2 press 3");
+            input($userChoice);
+            if($userChoice == 1){
+              showUserInformation();
+            };
+            if($userChoice == 2){
+              showMarketPlaceInformation();
+            };
+            if($userChoice == 3){
+              $currentRoom = 2;
+            };
+            if($userChoice < 0 || $userChoice > 6){
+               printLine("Enter valid value");
+            };
+          };
+        }else_if($currentRoom == 5){
+          if($castle->room5->monster->strength > 0){
+            printLine("You do not fight with this monster.");
+            printLine("For character info press 1 \nFor marketPlace press 2\nFor attack press 3\nFor go back to room2 press 4");
+            input($userChoice);
+            if($userChoice == 1){
+              showUserInformation();
+            };
+            if($userChoice == 2){
+              showMarketPlaceInformation();
+            };
+            if($userChoice == 3){
+              user->isAlive = battleWithMonster(5, castle->room2->monster->strength, castle->room2->monster->attack);
+            };
+            if($userChoice == 4){
+              $currentRoom = 2;
+            };
+            if($userChoice < 0 || $userChoice > 6){
+              printLine("Enter valid value");
+            };
+          }else{
+            printLine("You finish the game!!");
+            var_number $yourResult = (2*$user->wealth + 3*$user->strength);
+            printLine("Your score is " , $yourResult);
+            printLine("Choose What you want");
+            printLine("For character info press 1 \nFor marketPlace press 2\nFor pass room2 press 3");
+            input($userChoice);
+            if($userChoice == 1){
+              showUserInformation();
+            };
+            if($userChoice == 2){
+              showMarketPlaceInformation();
+            };
+            if($userChoice == 3){
+              $currentRoom = 2;
+            };
+            if($userChoice < 0 || $userChoice > 6){
+               printLine("Enter valid value");
+            };
+
+          };
+        };
+    };
+
+    /*showing result*/
+    if(isAlive){
+      printLine("You won the game!!");
+      var_number $yourResult = (2*$user->wealth + 3*$user->strength);
+      printLine("Your score is " , $yourResult);
+    }else{
+      printLine("You lost the game!!");
+      var_number $yourResult = (2*$user->wealth + 3*$user->strength);
+      printLine("Your score is " , $yourResult);
+    };
+}
+end
+
+
+
+
+start
+
+/* This is the second game */
+
+function fight( $gameStep, $firstPower, $secondPower, isScottyCalled) => {
+   if(true){
+      return $firstPower > $secondPower || isScottyCalled;
+   };
+   if($gameStep == 2){
+      return $firstPower > $secondPower && isScottyCalled;
+   };
+   if($gameStep == 3){
+      return $firstPower > $secondPower ~| isScottyCalled;
+   };
+   if($gameStep == 4){
+      return $firstPower > $secondPower ~& isScottyCalled;
+   };
+   if($gameStep == 5){
+      return $firstPower > $secondPower <==> isScottyCalled;
+   };
+   if($gameStep == 6){
+      return $firstPower > $secondPower ==> isScottyCalled;
+   };
+   if($gameStep == 7){
+      return $firstPower > $secondPower && (isScottyCalled || true);
+   };
+   if($gameStep == 8){
+      return $firstPower > $secondPower && (isScottyCalled || true);
+   };
+   if($gameStep == 9){
+      return $firstPower > $secondPower && (isScottyCalled || true);
+   };
+}
+
+main => {
+
+  var_object user ={
+    var_number $userAge = 15
+  };
+
+  var_number $gameFollow = 1;
+  var_number $userInput = 0;
+  var_number $points = 10;
+
+  var_list planets = [
+      "Vulcan",
+      "Andoria",
+      "Niburu",
+      "Remus"
+  ];
+
+  var_list crew = [
+      "CAPTAIN KIRK",
+      "SPOCK",
+      "UHURA"
+  ];
+
+  var_list evils =[
+      "KHAN",
+      "GENERAL CHANG",
+      "DR, SORAN"
+  ];
+
+  printLine("Welcome to Fedarels space, you should enter a value each step to");
+  printLine("win, but you have to be carefull while you are choosing because choosing");
+  printLine("bigger value is not a good choice always.");
+
+  while($gameFollow < 10){
+    var_bool beamMeUpScotty = true;
+    input($userInput);
+    if($gameFollow == 1 || $gameFollow == 5 || $gameFollow == 8 || beamMeUpScotty){
+      var_bool currentResult = fight($gameFollow, $gameFollow + $userInput - (4 + 2 / 2),$gameFollow / ( 1 / ($userInput + 2 / 2) ),beamMeUpScotty );
+    }else{
+      var_bool currentResult = fight($gameFollow,$gameFollow / ( 1 / ($userInput + 2 / 2) ), $gameFollow + $userInput - (4 + 2 / 2),beamMeUpScotty );
+    };
+
+    if(currentResult){
+      $points = $points * $points;
+      if($gameFollow == 1 x| $gameFollow == 4 || $gameFollow == 7){
+        printLine("Fight winner is " , crew[0]);
+      };
+      if($gameFollow == 2 || $gameFollow == 5 || $gameFollow == 8){
+        printLine("Fight winner is " , crew[1]);
+
+      };
+      if($gameFollow == 3 || $gameFollow == 6 || $gameFollow == 9){
+        printLine("Fight winner is " , crew[2]);
+      };
+    }else{
+      if($points > 10){
+        $points = $points / 10;
+      }else{
+        $points = $points / 2;
+      };
+
+      if($gameFollow == 1 || $gameFollow == 4 || $gameFollow == 7){
+        printLine("Fight winner is " , evils[0]);
+      };
+      if($gameFollow == 2 || $gameFollow == 5 || $gameFollow == 8){
+        printLine("Fight winner is " , evils[1]);
+      };
+      if($gameFollow == 3 || $gameFollow == 6 || $gameFollow == 9){
+        printLine("Fight winner is " , evils[2]);
+      };
+    };
+
+    beamMeUpScotty = ~beamMeUpScotty;
+    $gameFollow++;
+  };
+
+  printLine("CAPTAIN KIRK: BEAM ME UP ", user->userName);
+  printLine("Score " , $points);
+  printLine("Game is finished ");
+}
+
+end
