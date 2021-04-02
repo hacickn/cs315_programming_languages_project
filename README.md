@@ -52,6 +52,6 @@ Same with the project 1
 
 
 #### NOTE
--Details can be found in the reports of the [project 1](315Project1/cs315_project1.pdf) and [project 2](315Project1/cs315_project2_word.pdf).
+-Details can be found in the reports of the [project 1](315Project1/cs315_project1.pdf) and [project 2](315Project1/cs315_project2.pdf).
 
 -My teammate was [Muhammed Musab Oksas](https://github.com/mmoksas68) 
